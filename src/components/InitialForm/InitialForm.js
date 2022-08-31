@@ -1,23 +1,33 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Modal from "react-bootstrap/Modal";
 import { Container, Button, Col, Row, Form } from "react-bootstrap";
 
 const InitialForm = () => {
   const [cityCode, setCityCode] = useState([]);
-  useEffect(() => {
-    axios
-      .get(
-        "https://cors-anywhere-thud.herokuapp.com/https://api.flightstats.com/flex/airports/rest/v1/json/all?appId=4af09662&appKey=d7d4dd168c63fb2101fe6fdfa8d52a2e"
-      )
-      .then((res) => {
-        console.log("data:", res.data);
-        // setCityCode(res.data);
-        setTimeout(() => {
-          setCityCode(res.data);
-          console.log(cityCode, "settled city code");
-        }, 3000);
-      });
-  }, []);
+  // const values = [true, "sm-down", "md-down", "lg-down", "xl-down", "xxl-down"];
+  const [fullscreen, setFullscreen] = useState(true);
+  const [show, setShow] = useState(false);
+
+  // useEffect(() => {
+  //   axios
+  //     .get(
+  //       "https://cors-anywhere-thud.herokuapp.com/https://api.flightstats.com/flex/airports/rest/v1/json/all?appId=4af09662&appKey=d7d4dd168c63fb2101fe6fdfa8d52a2e"
+  //     )
+  //     .then((res) => {
+  //       console.log("data:", res.data);
+  //       // setCityCode(res.data);
+  //       setTimeout(() => {
+  //         setCityCode(res.data);
+  //         console.log(cityCode, "settled city code");
+  //       }, 3000);
+  //     });
+  // }, []);
+
+  function handleShow(breakpoint) {
+    setFullscreen(breakpoint);
+    setShow(true);
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -58,11 +68,13 @@ const InitialForm = () => {
     //   }
     // ).then((res) => console.log(res));
 
-    axios(
-      "https://cors-anywhere-thud.herokuapp.com/https://api.flightstats.com/flex/schedules/rest/v1/json/from/lhe/to/khi/departing/2022/9/1?appId=4af09662&appKey=d7d4dd168c63fb2101fe6fdfa8d52a2e"
-    ).then((res) => {
-      console.log("scheduele data:", res.data);
-    });
+    // axios(
+    //   "https://cors-anywhere-thud.herokuapp.com/https://api.flightstats.com/flex/schedules/rest/v1/json/from/lhe/to/khi/departing/2022/9/1?appId=4af09662&appKey=d7d4dd168c63fb2101fe6fdfa8d52a2e"
+    // ).then((res) => {
+    //   console.log("scheduele data:", res.data);
+
+    //   setShow(true);
+    // });
   };
   return (
     <>
@@ -188,6 +200,21 @@ const InitialForm = () => {
           </Button>
         </Form>
       )}
+
+      {/* Modal for Flights response and form data */}
+
+      {/* {values.map((v, idx) => (
+        <Button key={idx} className="me-2 mb-2" onClick={() => handleShow(v)}>
+          Full screen
+          {typeof v === "string" && `below ${v.split("-")[0]}`}
+        </Button>
+      ))} */}
+      <Modal show={show} fullscreen={fullscreen} onHide={() => setShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Modal body content</Modal.Body>
+      </Modal>
     </>
   );
 };

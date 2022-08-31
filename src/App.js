@@ -4,6 +4,7 @@ import Header from "./components/Header/Header";
 import Slider from "./components/Slider/Slider";
 import InitialForm from "./components/InitialForm/InitialForm";
 import Cards from "./components/Cards/Cards";
+import FlightDetails from "./components/InitialForm/FlightDetails";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Slider />
       <InitialForm />
       <Cards />
+      <FlightDetails />
     </>
   );
 }
