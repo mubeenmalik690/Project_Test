@@ -1,7 +1,6 @@
 import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-
 const Holiday = () => {
   const responsive = {
     desktop: {
@@ -22,6 +21,9 @@ const Holiday = () => {
   };
   return (
     <div>
+      <div className="container my-2 ">
+        <h2 className="my-5 container text-center">Top Holiday Destinations</h2>
+      </div>
       <Carousel
         swipeable={true}
         draggable={false}
@@ -34,7 +36,7 @@ const Holiday = () => {
         keyBoardControl={true}
         customTransition="all .5"
         transitionDuration={500}
-        containerClass="carousel-container container"
+        containerClass="carousel-container container my-5"
         removeArrowOnDeviceType={["tablet", "mobile"]}
         // deviceType={deviceType}
         dotListClass="custom-dot-list-style"
@@ -95,7 +97,6 @@ const Holiday = () => {
           </div>
         </div>
       </Carousel>
-      ;
     </div>
   );
 };

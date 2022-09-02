@@ -7,6 +7,8 @@ import Slider from "./components/Slider/Slider";
 import InitialForm from "./components/InitialForm/InitialForm";
 import Cards from "./components/Cards/Cards";
 import Holiday from "./components/Holidays/Holiday";
+import Gallery from "./components/Gallery/Gallery";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   const [cityCode, setCityCode] = useState([]);
@@ -38,6 +40,8 @@ function App() {
       {/* <InitialForm cityCode={cityCode} setCityCode={setCityCode} /> */}
       <Cards />
       <Holiday />
+      <Gallery />
+      <Footer />
     </>
   );
 }

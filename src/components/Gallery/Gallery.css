@@ -1,0 +1,16 @@
+.detail {
+    text-align                : center;
+    background                : #00000091;
+    position                  : relative;
+    top                       : -68.5px;
+    color                     : white;
+    padding                   : 10px;
+    border-bottom-left-radius : 5px;
+    border-bottom-right-radius: 5px;
+
+
+}
+
+img {
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
