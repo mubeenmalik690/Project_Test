@@ -1,29 +1,32 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Container, Button, Col, Row, Form, Table } from "react-bootstrap";
+import Select from "react-select";
+import SelectSearch from "react-select-search";
 
-const InitialForm = () => {
-  const [cityCode, setCityCode] = useState([]);
-  const [details, setDetails] = useState();
+const InitialForm = ({ cityCode, setCityCode }) => {
+  const [details, setDetails] = useState([]);
   const [leave, setLeave] = useState();
   const [arrive, setArrive] = useState();
   const [moment, setMoment] = useState();
+  const [moment2, setMoment2] = useState();
+  const [options, setOptions] = useState();
+  const [cityDep, setCityDep] = useState();
+  const [cityArr, setCityArr] = useState();
 
   useEffect(() => {
-    axios
-      .get(
-        "https://cors-anywhere-thud.herokuapp.com/https://api.flightstats.com/flex/airports/rest/v1/json/all?appId=4af09662&appKey=d7d4dd168c63fb2101fe6fdfa8d52a2e"
-      )
-      .then((res) => {
-        console.log("data:", res.data.airports);
-        setCityCode(res.data.airports);
-        console.log("settled city codes", cityCode);
-        // setTimeout(() => {
-        //   setCityCode(res.data.airports);
-        //   console.log(cityCode, "settled city code");
-        // }, 3000);
-      });
+    optionsFunc();
   }, []);
+
+  const optionsFunc = () => {
+    let data = [];
+    let proc = cityCode.map((item, index) => {
+      return data.push({ label: `${item.city}`, value: `${item.fs}` });
+    });
+    console.log("making options:", data);
+    setOptions(data);
+    console.log("options made:", options);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -82,12 +85,51 @@ const InitialForm = () => {
     });
   };
 
+  const handOver = (e) => {
+    e.preventDefault();
+    console.log(e.target);
+    console.log(e.target[0].value);
+    console.log(e.target[1].value);
+    let going = e.target[1].value;
+    let coming = e.target[3].value;
+    console.log(e.target[2].value);
+    console.log(e.target[3].value);
+    // console.log(e.target[4].value);
+    // console.log(e.target[5].value);
+    // console.log(e.target[6].value);
+    // console.log(e.target[7].value);
+    // console.log(e.target[8].value);
+    // console.log(e.target[9].value);
+
+    // let fullDate = e.target[2].value;
+    let fullDate = moment2;
+    let dateArray = fullDate.split("-");
+    console.log("Date Array:", dateArray);
+    let year = parseInt(dateArray[0]);
+    let month = parseInt(dateArray[1]);
+    let day = parseInt(dateArray[2]);
+    console.log("final date:", year, month, day);
+
+    axios(
+      `https://cors-anywhere-thud.herokuapp.com/https://api.flightstats.com/flex/schedules/rest/v1/json/from/${going}/to/${coming}/departing/${year}/${month}/${day}?appId=4af09662&appKey=d7d4dd168c63fb2101fe6fdfa8d52a2e`
+    ).then((res) => {
+      console.log("scheduele data:", res.data);
+      // setDetails("airlines: ", res.data.appendix.airlines);
+      // console.log(details);
+
+      setTimeout(() => {
+        setDetails(res.data.appendix.airlines);
+        console.log(details, "settled Flight Details");
+      }, 2000);
+    });
+  };
+
   const onSearchChange = (e) => {
     let searching = e.target.value;
-    const filteredCity = cityCode.filter((item, index) => {
+    let filteredCity = cityCode.filter((item, index) => {
       return item.city.toLowerCase().includes(searching.toLowerCase());
     });
-    console.log(filteredCity);
+    console.log("first", filteredCity);
   };
 
   return (
@@ -113,7 +155,7 @@ const InitialForm = () => {
                 ) : (
                   cityCode.map((item, i) => (
                     <option key={i} value={item.fs}>
-                      {item.city}
+                      {item.city} , {item.name} [{item.fs}], {item.countryName}
                     </option>
                   ))
                 )}
@@ -132,7 +174,7 @@ const InitialForm = () => {
                 ) : (
                   cityCode.map((item, i) => (
                     <option key={i} value={item.fs}>
-                      {item.city}
+                      {item.city} , {item.name} [{item.fs}], {item.countryName}
                     </option>
                   ))
                 )}
@@ -145,6 +187,7 @@ const InitialForm = () => {
             <Form.Control
               type="date"
               placeholder=""
+              value={moment}
               onChange={(e) => setMoment(e.target.value)}
             />
           </Form.Group>
@@ -224,15 +267,51 @@ const InitialForm = () => {
           </Button>
         </Form>
       )}
-      <form>
-        <label htmlFor="city">city name</label>
+
+      <form onSubmit={(e) => handOver(e)}>
+        {/* <label htmlFor="dcity">city</label> */}
+        <Select
+          name="dcity"
+          // id="dcity"
+          isSearchable
+          placeholder="select city"
+          // value={cityDep}
+          options={options}
+          // onChange={(e) => console.log(e.target.value)}
+        />
+
+        {/* <label htmlFor="acity">city</label> */}
+
+        <Select
+          name="acity"
+          // id="acity"
+          isSearchable
+          placeholder="select city"
+          value={cityArr}
+          options={options}
+          // onChange={(e) => console.log(e.target.value)}
+        />
+
+        <label htmlFor="ddate">Date of departure</label>
+        <input
+          type="date"
+          // id="ddate"
+          name="ddate"
+          value={moment2}
+          onChange={(e) => setMoment2(e.target.value)}
+        />
+
+        <button type="submit">Submit</button>
+
+        {/* <label htmlFor="cityOne">city name</label>
         <input
           type="search"
-          id="city"
-          name="city"
+          id="cityOne"
+          name="cityOne"
           onChange={(e) => onSearchChange(e)}
-        />
+        /> */}
       </form>
+      {/* <button onClick={console.log(cityDep)}>yess</button> */}
     </>
   );
 };
