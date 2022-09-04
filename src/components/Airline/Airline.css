@@ -1,0 +1,16 @@
+.new {
+    display    : flex;
+    align-items: center;
+}
+
+.new .one {
+    text-align: center;
+    width     : 50%;
+
+}
+
+.new .two {
+    text-align    : left;
+    width         : 50%;
+    padding-bottom: 15px;
+}

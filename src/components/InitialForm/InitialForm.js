@@ -1,39 +1,33 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Container, Button, Col, Row, Form, Table } from "react-bootstrap";
-import Select from "react-select";
-import SelectSearch from "react-select-search";
+import { Button, Col, Row, Form } from "react-bootstrap";
+import emailjs from "@emailjs/browser";
+import Results from "../Results/Results";
+import airportsAutocomplete from "airports-autocomplete";
+import Multiselect from "multiselect-react-dropdown";
 
-const InitialForm = ({ cityCode, setCityCode }) => {
-  const [details, setDetails] = useState([]);
+const InitialForm = () => {
+  const [details, setDetails] = useState({});
+  const [finalSch, setFinalSch] = useState([]);
   const [leave, setLeave] = useState();
   const [arrive, setArrive] = useState();
   const [moment, setMoment] = useState();
-  const [moment2, setMoment2] = useState();
-  const [options, setOptions] = useState();
-  const [cityDep, setCityDep] = useState();
-  const [cityArr, setCityArr] = useState();
+  const [newData, setNewData] = useState([]);
 
   useEffect(() => {
-    optionsFunc();
-  }, []);
-
-  const optionsFunc = () => {
-    let data = [];
-    let proc = cityCode.map((item, index) => {
-      return data.push({ label: `${item.city}`, value: `${item.fs}` });
-    });
-    console.log("making options:", data);
-    setOptions(data);
-    console.log("options made:", options);
-  };
+    airportsAutocomplete()
+      .then((res) => {
+        console.log("auto complete", res.data);
+        setNewData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [finalSch]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // let leave = e.target[0].value;
     console.log(e.target[0].value);
-
-    // let arrive = e.target[1].value;
     console.log(e.target[1].value);
     console.log(e.target[2].value);
     console.log(e.target[3].value);
@@ -42,7 +36,6 @@ const InitialForm = ({ cityCode, setCityCode }) => {
     console.log(e.target[6].value);
     console.log(e.target[7].value);
 
-    // let fullDate = e.target[2].value;
     let fullDate = moment;
     let dateArray = fullDate.split("-");
     console.log("Date Array:", dateArray);
@@ -51,90 +44,58 @@ const InitialForm = ({ cityCode, setCityCode }) => {
     let day = parseInt(dateArray[2]);
     console.log("final date:", year, month, day);
 
-    var bodyFormData = new FormData();
-    bodyFormData.append("appId", "4af09662");
-    bodyFormData.append("appKey", "d7d4dd168c63fb2101fe6fdfa8d52a2e");
-    bodyFormData.append("departureAirportCode	", "lhe");
-    bodyFormData.append("arrivalAirportCode	", "khi");
-    bodyFormData.append("year	", year);
-    bodyFormData.append("month	", month);
-    bodyFormData.append("day	", day);
-
-    // fetch(
-    //   "https://api.flightstats.com/flex/schedules/rest/v1/json/from/lhe/to/khi/departing/2022/9/1?appId=4af09662&appKey=d7d4dd168c63fb2101fe6fdfa8d52a2e",
-    //   {
-    //     method: "GET",
-    //     mode: "no-cors",
-    //     headers: {
-    //       "Content-Type": "text/plain;charset=UTF-8",
-    //     },
-    //   }
-    // ).then((res) => console.log(res));
-
     axios(
       `https://cors-anywhere-thud.herokuapp.com/https://api.flightstats.com/flex/schedules/rest/v1/json/from/${leave}/to/${arrive}/departing/${year}/${month}/${day}?appId=4af09662&appKey=d7d4dd168c63fb2101fe6fdfa8d52a2e`
-    ).then((res) => {
-      console.log("scheduele data:", res.data);
-      // setDetails("airlines: ", res.data.appendix.airlines);
-      // console.log(details);
-
-      setTimeout(() => {
-        setDetails(res.data.appendix.airlines);
-        console.log(details, "settled Flight Details");
-      }, 2000);
-    });
+    )
+      .then((res) => {
+        console.log("scheduele data:", res.data);
+        setDetails(res.data.appendix);
+        setFinalSch(res.data.scheduledFlights);
+        console.log("appendix: ", details);
+        console.log("scheduledFlights", finalSch);
+      })
+      .catch((err) => {
+        alert("Somthing went wrong", err);
+        console.log(err);
+      });
   };
 
-  const handOver = (e) => {
+  const sendEmail = (e) => {
     e.preventDefault();
-    console.log(e.target);
-    console.log(e.target[0].value);
-    console.log(e.target[1].value);
-    let going = e.target[1].value;
-    let coming = e.target[3].value;
-    console.log(e.target[2].value);
-    console.log(e.target[3].value);
-    // console.log(e.target[4].value);
-    // console.log(e.target[5].value);
-    // console.log(e.target[6].value);
-    // console.log(e.target[7].value);
-    // console.log(e.target[8].value);
-    // console.log(e.target[9].value);
 
-    // let fullDate = e.target[2].value;
-    let fullDate = moment2;
-    let dateArray = fullDate.split("-");
-    console.log("Date Array:", dateArray);
-    let year = parseInt(dateArray[0]);
-    let month = parseInt(dateArray[1]);
-    let day = parseInt(dateArray[2]);
-    console.log("final date:", year, month, day);
-
-    axios(
-      `https://cors-anywhere-thud.herokuapp.com/https://api.flightstats.com/flex/schedules/rest/v1/json/from/${going}/to/${coming}/departing/${year}/${month}/${day}?appId=4af09662&appKey=d7d4dd168c63fb2101fe6fdfa8d52a2e`
-    ).then((res) => {
-      console.log("scheduele data:", res.data);
-      // setDetails("airlines: ", res.data.appendix.airlines);
-      // console.log(details);
-
-      setTimeout(() => {
-        setDetails(res.data.appendix.airlines);
-        console.log(details, "settled Flight Details");
-      }, 2000);
-    });
+    emailjs
+      .sendForm(
+        "service_7hnsfbh",
+        "template_p6y6qzn",
+        e.target,
+        "4O8amRTWJcioOPat4"
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+          alert("Email Sent Successfully", result.text);
+        },
+        (error) => {
+          alert("Somthing went wrong", error);
+          console.log(error.text);
+        }
+      );
+    e.target.reset();
   };
 
-  const onSearchChange = (e) => {
-    let searching = e.target.value;
-    let filteredCity = cityCode.filter((item, index) => {
-      return item.city.toLowerCase().includes(searching.toLowerCase());
-    });
-    console.log("first", filteredCity);
+  const onSelect = (selectedList, selectedItem) => {
+    console.log("multiselected item", selectedItem.iata_code);
+    setLeave(selectedItem.iata_code);
+  };
+
+  const onSelect2 = (selectedList, selectedItem) => {
+    console.log("multiselected item", selectedItem.iata_code);
+    setArrive(selectedItem.iata_code);
   };
 
   return (
     <>
-      {cityCode.length === 0 ? (
+      {newData === 0 ? (
         <h1>Loading</h1>
       ) : (
         <Form
@@ -145,40 +106,24 @@ const InitialForm = ({ cityCode, setCityCode }) => {
             <Form.Group as={Col} controlId="">
               <Form.Label>Leaving From</Form.Label>
               {/* <Form.Control type="" placeholder="City Name" /> */}
-              <Form.Select
-                defaultValue="Youth"
-                onChange={(e) => setLeave(e.target.value)}
-              >
-                <option defaultValue="">City Name</option>
-                {cityCode.length === 0 ? (
-                  <option>loading</option>
-                ) : (
-                  cityCode.map((item, i) => (
-                    <option key={i} value={item.fs}>
-                      {item.city} , {item.name} [{item.fs}], {item.countryName}
-                    </option>
-                  ))
-                )}
-              </Form.Select>
+              <Multiselect
+                options={newData} // Options to display in the dropdown
+                selectedValues="lahore" // Preselected value to persist in dropdown
+                displayValue="name" // Property name to display in the dropdown options
+                // singleSelect={true}
+                onSelect={onSelect}
+              />
             </Form.Group>
 
             <Form.Group as={Col} controlId="">
               <Form.Label>Arrive To</Form.Label>
-              <Form.Select
-                defaultValue="Youth"
-                onChange={(e) => setArrive(e.target.value)}
-              >
-                <option defaultValue="">City Name</option>
-                {cityCode.length === 0 ? (
-                  <option>loading</option>
-                ) : (
-                  cityCode.map((item, i) => (
-                    <option key={i} value={item.fs}>
-                      {item.city} , {item.name} [{item.fs}], {item.countryName}
-                    </option>
-                  ))
-                )}
-              </Form.Select>
+              <Multiselect
+                options={newData} // Options to display in the dropdown
+                selectedValues="lahore" // Preselected value to persist in dropdown
+                displayValue="name" // Property name to display in the dropdown options
+                // singleSelect={true}
+                onSelect={onSelect2}
+              />
             </Form.Group>
           </Row>
 
@@ -258,60 +203,39 @@ const InitialForm = ({ cityCode, setCityCode }) => {
             </Form.Select>
           </Form.Group>
 
-          {/* <Form.Group className="mb-3" id="formGridCheckbox">
-          <Form.Check type="checkbox" label="Check me out" />
-        </Form.Group> */}
-
           <Button variant="primary" type="submit">
             Search Flights
           </Button>
         </Form>
       )}
 
-      <form onSubmit={(e) => handOver(e)}>
-        {/* <label htmlFor="dcity">city</label> */}
-        <Select
-          name="dcity"
-          // id="dcity"
-          isSearchable
-          placeholder="select city"
-          // value={cityDep}
-          options={options}
-          // onChange={(e) => console.log(e.target.value)}
-        />
-
-        {/* <label htmlFor="acity">city</label> */}
-
-        <Select
-          name="acity"
-          // id="acity"
-          isSearchable
-          placeholder="select city"
-          value={cityArr}
-          options={options}
-          // onChange={(e) => console.log(e.target.value)}
-        />
-
-        <label htmlFor="ddate">Date of departure</label>
-        <input
-          type="date"
-          // id="ddate"
-          name="ddate"
-          value={moment2}
-          onChange={(e) => setMoment2(e.target.value)}
-        />
-
-        <button type="submit">Submit</button>
-
-        {/* <label htmlFor="cityOne">city name</label>
-        <input
-          type="search"
-          id="cityOne"
-          name="cityOne"
-          onChange={(e) => onSearchChange(e)}
-        /> */}
-      </form>
-      {/* <button onClick={console.log(cityDep)}>yess</button> */}
+      {/* <form onSubmit={sendEmail}>
+        <label>Name</label>
+        <input type="text" placeholder="Full Name" name="name" />
+        <label>Email</label>
+        <input type="email" placeholder="Email" name="email" />
+        <label>Subject</label>
+        <input type="text" placeholder="Subject" name="subject" />
+        <label>Message</label>
+        <textarea placeholder="Your Message" name="message" />
+        <input type="submit" value="Send" />
+      </form> */}
+      {console.log(finalSch)}
+      {finalSch != null
+        ? finalSch.map((item, index) => {
+            return (
+              <div key={index}>
+                <h1>Departure Airport : {item.departureAirportFsCode}</h1>
+                <p>Departure Time : {item.departureTime}</p>
+                <h1>Arrival Airport : {item.arrivalAirportFsCode}</h1>
+                <p>Arrival Time : {item.arrivalTime}</p>
+                <h1>Flight Number : {item.flightNumber}</h1>
+                <h3>Stops : {item.stops}</h3>
+              </div>
+            );
+          })
+        : null}
+      {/* <Results finalSch={finalSch} /> */}
     </>
   );
 };
