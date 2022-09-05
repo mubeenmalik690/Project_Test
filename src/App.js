@@ -10,17 +10,13 @@ import Holiday from "./components/Holidays/Holiday";
 import Gallery from "./components/Gallery/Gallery";
 import Footer from "./components/Footer/Footer";
 import Airline from "./components/Airline/Airline";
+import Routing from "./components/Routes/Routes";
 
 function App() {
   return (
     <>
       <Header />
-      <Slider />
-      <InitialForm />
-      <Cards />
-      <Holiday />
-      <Gallery />
-      <Airline />
+      <Routing />
       <Footer />
     </>
   );
