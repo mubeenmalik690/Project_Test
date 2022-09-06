@@ -8,6 +8,8 @@ import Holiday from "../Holidays/Holiday";
 import Airline from "../Airline/Airline";
 import Gallery from "../Gallery/Gallery";
 import { useNavigate } from "react-router-dom";
+import emailjs from "@emailjs/browser";
+
 const { Option } = Select;
 
 const InitialForm = () => {
@@ -57,6 +59,29 @@ const InitialForm = () => {
         day: day,
       },
     });
+  };
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+
+    emailjs
+      .sendForm(
+        "service_7hnsfbh",
+        "template_p6y6qzn",
+        e.target,
+        "4O8amRTWJcioOPat4"
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+          alert("Email Sent Successfully", result.text);
+        },
+        (error) => {
+          alert("Somthing went wrong", error.text);
+          console.log(error.text);
+        }
+      );
+    e.target.reset();
   };
 
   return (
@@ -232,6 +257,18 @@ const InitialForm = () => {
           </Button>
         </Form>
       )}
+
+      <form onSubmit={sendEmail}>
+        <label>Name</label>
+        <input type="text" placeholder="Full Name" name="name" />
+        <label>Email</label>
+        <input type="email" placeholder="Email" name="email" />
+        <label>Subject</label>
+        <input type="text" placeholder="Subject" name="subject" />
+        <label>Message</label>
+        <textarea placeholder="Your Message" name="message" />
+        <input type="submit" value="Send" />
+      </form>
 
       <Cards />
       <Holiday />

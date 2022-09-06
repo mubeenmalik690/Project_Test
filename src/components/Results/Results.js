@@ -16,7 +16,7 @@ const Results = () => {
 
   useEffect(() => {
     axios(
-      `https://cors-anywhere-thud.herokuapp.com/https://api.flightstats.com/flex/schedules/rest/v1/json/from/${depart}/to/${destiny}/departing/${year}/${month}/${day}?appId=4af09662&appKey=d7d4dd168c63fb2101fe6fdfa8d52a2e`
+      `https://cors-anywhere-thud.herokuapp.com/https://api.flightstats.com/flex/schedules/rest/v1/json/from/${depart}/to/${destiny}/departing/${year}/${month}/${day}?appId=5f701a91&appKey=cd3a7444b5de4bd65087563e81eea642`
     )
       .then((res) => {
         console.log("scheduele data:", res.data);
@@ -100,7 +100,7 @@ const Results = () => {
           })
         : null}
       <Modal
-        title="Basic Modal"
+        title="Customer Service"
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -108,14 +108,44 @@ const Results = () => {
       >
         <form onSubmit={sendEmail}>
           <label>Name</label>
-          <input type="text" placeholder="Full Name" name="name" />
+          <br />
+          <input
+            className="form-control"
+            type="text"
+            placeholder="Full Name"
+            name="name"
+          />
+          <br />
           <label>Email</label>
-          <input type="email" placeholder="Email" name="email" />
-          <label>Subject</label>
-          <input type="text" placeholder="Subject" name="subject" />
+          <br />
+          <input
+            className="form-control"
+            type="email"
+            placeholder="Email"
+            name="email"
+          />
+          <br />
+          <label>Phone Number</label>
+          <br />
+          <input
+            className="form-control"
+            type="number"
+            placeholder="Your best callback Number"
+            name="number"
+          />
+          <br />
           <label>Message</label>
-          <textarea placeholder="Your Message" name="message" />
-          <input type="submit" value="Send" />
+          <br />
+          <textarea
+            className="form-control"
+            placeholder="Your Message"
+            name="message"
+          />
+          <br />
+          <div className="ms-auto">
+            <button onClick={handleCancel}>Cancel</button>{" "}
+            <input type="submit" value="Send" />
+          </div>
         </form>
       </Modal>
     </>
