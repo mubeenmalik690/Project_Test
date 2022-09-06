@@ -156,10 +156,12 @@ const Results = () => {
           />
           <br />
           <div className="ms-auto">
-            <button onClick={handleCancel}>Cancel</button>{" "}
-            <input type="submit" value="Send" />
+            <button className="mb-2" onClick={sendEmail}>
+              Send
+            </button>
           </div>
         </form>
+        <button onClick={handleCancel}>Cancel</button>{" "}
       </Modal>
     </>
   );
