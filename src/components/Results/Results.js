@@ -68,37 +68,50 @@ const Results = () => {
 
   return (
     <>
-      <h1>Results</h1>
-      {finalSch != null
-        ? finalSch.map((item, index) => {
-            return (
-              <div key={index} className="my-3">
-                <Card className="text-center">
-                  <Card.Header>Your Flight Scheduele</Card.Header>
-                  <Card.Body>
-                    <Card.Title>
-                      Departure Airport : {item.departureAirportFsCode}
-                    </Card.Title>
-                    <Card.Text>Departure Time : {item.departureTime}</Card.Text>
-                    <Card.Title>
-                      Arrival Airport : {item.arrivalAirportFsCode}
-                    </Card.Title>
-                    <Card.Text>
-                      Arrival Time : {item.arrivalTime}
-                      Stops : {item.stops}
-                    </Card.Text>
-                    <Button variant="primary" onClick={showModal}>
-                      Book Now
-                    </Button>
-                  </Card.Body>
-                  <Card.Footer className="text-muted">
-                    Flight Number : {item.flightNumber}
-                  </Card.Footer>
-                </Card>
-              </div>
-            );
-          })
-        : null}
+      <div className="m-auto my-3">
+        <h1 className="h1">Results</h1>
+      </div>
+
+      {finalSch != null ? (
+        finalSch.map((item, index) => {
+          return (
+            <div key={index} className="my-3">
+              <Card className="text-center">
+                <Card.Header>Your Flight Scheduele</Card.Header>
+                <Card.Body>
+                  <Card.Title>
+                    Departure Airport : {item.departureAirportFsCode}
+                  </Card.Title>
+                  <Card.Text>Departure Time : {item.departureTime}</Card.Text>
+                  <Card.Title>
+                    Arrival Airport : {item.arrivalAirportFsCode}
+                  </Card.Title>
+                  <Card.Text>
+                    Arrival Time : {item.arrivalTime}
+                    Stops : {item.stops}
+                  </Card.Text>
+                  <Button variant="primary" onClick={showModal}>
+                    Book Now
+                  </Button>
+                </Card.Body>
+                <Card.Footer className="text-muted">
+                  Flight Number : {item.flightNumber}
+                </Card.Footer>
+              </Card>
+            </div>
+          );
+        })
+      ) : (
+        <div className="h1 w-75 m-auto d-flex flex-column">
+          <h3>
+            We're <strong>Sorry</strong> that no flights are available for your
+            search, Send us an Email so we can assist you better
+          </h3>
+          <Button variant="primary" onClick={showModal}>
+            Send Email
+          </Button>
+        </div>
+      )}
       <Modal
         title="Customer Service"
         open={isModalOpen}
