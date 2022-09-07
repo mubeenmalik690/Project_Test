@@ -8,7 +8,6 @@ import Holiday from "../Holidays/Holiday";
 import Airline from "../Airline/Airline";
 import Gallery from "../Gallery/Gallery";
 import { useNavigate } from "react-router-dom";
-import emailjs from "@emailjs/browser";
 
 const { Option } = Select;
 
@@ -33,6 +32,8 @@ const InitialForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    let arrive_alert = document.getElementById("arrive_alert");
+    // let Firstdate_alert = document.getElementById("Firstdate_alert");
     console.log(e.target[0].value);
     console.log(e.target[1].value);
     console.log(e.target[2].value);
@@ -41,6 +42,18 @@ const InitialForm = () => {
     console.log(e.target[5].value);
     console.log(e.target[6].value);
     console.log(e.target[7].value);
+
+    if (!arrive) {
+      arrive_alert.innerHTML = "* Field Required";
+      console.log(moment);
+      console.log(typeof moment);
+      return;
+    }
+    // if (typeof moment == undefined) {
+    //   Firstdate_alert.innerHTML = "* Field Required";
+    //   console.log(moment);
+    //   return;
+    // }
 
     let fullDate = moment;
     let dateArray = fullDate.split("-");
@@ -64,6 +77,13 @@ const InitialForm = () => {
   return (
     <>
       <Slider />
+      {/* <a
+        href="https://api.whatsapp.com/send?phone=51955081075&text=Hola%21%20Quisiera%20m%C3%A1s%20informaci%C3%B3n%20sobre%20Varela%202."
+        className="float"
+        target="_blank"
+      > */}
+      <img src="./imgs/whatsapp.svg" alt="whatsapp" className="whatsapp" />
+      {/* </a> */}
       {newData === 0 ? (
         <h1>Loading</h1>
       ) : (
@@ -120,11 +140,13 @@ const InitialForm = () => {
                 showSearch
                 onChange={(e) => {
                   setArrive(e);
+                  let arrive_alert = document.getElementById("arrive_alert");
+                  arrive_alert.innerHTML = "";
                 }}
-                defaultValue={{
-                  value: "LHR",
-                  label: "London, Heathrow[LHR],United Kingdom",
-                }}
+                // defaultValue={{
+                //   value: "LHR",
+                //   label: "London, Heathrow[LHR],United Kingdom",
+                // }}
                 placeholder="Search to Select"
                 optionFilterProp="children"
                 filterOption={(input, option) =>
@@ -151,6 +173,7 @@ const InitialForm = () => {
                   );
                 })}
               </Select>
+              <span id="arrive_alert" className="text-danger"></span>
             </Form.Group>
           </Row>
 
@@ -160,8 +183,14 @@ const InitialForm = () => {
               type="date"
               placeholder=""
               value={moment}
-              onChange={(e) => setMoment(e.target.value)}
+              onChange={(e) => {
+                setMoment(e.target.value);
+                // let Firstdate_alert =
+                //   document.getElementById("Firstdate_alert");
+                // Firstdate_alert.innerHTML = "";
+              }}
             />
+            <span id="Firstdate_alert" className="text-danger"></span>
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formGridAddress2">

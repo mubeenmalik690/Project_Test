@@ -11,15 +11,13 @@ const Footer = () => {
                 <div className="logo-widget footer-widget">
                   <figure className="logo-box">
                     <a href="#">
-                      <img src="https://i.ibb.co/QDy827D/ak-logo.png" alt="" />
+                      <img src="./imgs/Logo PNG.png" alt="pentaLogo" />
                     </a>
                   </figure>
                   <div className="text">
                     <p>
-                      Lorem ipsum dolor amet consectetur adi pisicing elit sed
-                      eiusm tempor incididunt ut labore dolore magna aliqua enim
-                      ad minim veniam quis.nostrud exercita.laboris nisi ut
-                      aliquip ea commodo conse quatuis aute irure.
+                      A good plus of traveling is that often you get new skills
+                      without difficulty and without even noticing it.
                     </p>
                   </div>
                   <ul className="footer-social">
@@ -67,9 +65,17 @@ const Footer = () => {
                 <div className="contact-widget footer-widget">
                   <div className="footer-title">Contacts</div>
                   <div className="text">
-                    <p>Lorem Ipsum, simply dummy text, printing, Chandigarh</p>
-                    <p>07853300780</p>
-                    <p>info@example.com</p>
+                    <p>
+                      <i class="fa-sharp fa-solid fa-location-dot"></i> 51,New
+                      Street Birmingham B2 4EG
+                    </p>
+                    <p>
+                      <i class="fa-solid fa-phone"></i> 07853300780
+                    </p>
+                    <p>
+                      <i class="fa-solid fa-envelope"></i>{" "}
+                      info@pentatravels.co.ok
+                    </p>
                   </div>
                 </div>
               </div>

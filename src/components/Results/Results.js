@@ -46,6 +46,9 @@ const Results = () => {
   const sendEmail = (e) => {
     e.preventDefault();
 
+    console.log("email form");
+    console.log(e.target);
+
     emailjs
       .sendForm(
         "service_7hnsfbh",
@@ -71,13 +74,29 @@ const Results = () => {
       <div className="m-auto my-3">
         <h1 className="h1">Results</h1>
       </div>
-
+      {/* carrierFsCode */}
       {finalSch != null ? (
         finalSch.map((item, index) => {
           return (
             <div key={index} className="my-3">
               <Card className="text-center">
-                <Card.Header>Your Flight Scheduele</Card.Header>
+                {details.airlines
+                  .filter((item2, index) => {
+                    return item2.fs.toLowerCase() ==
+                      item.carrierFsCode.toLowerCase()
+                      ? item2.name
+                      : null;
+                  })
+                  .map((x) => {
+                    return (
+                      <Card.Header>
+                        {" "}
+                        <h1 className="h1">
+                          {index + 1}: {x.name}
+                        </h1>{" "}
+                      </Card.Header>
+                    );
+                  })}
                 <Card.Body>
                   <Card.Title>
                     Departure Airport : {item.departureAirportFsCode}
@@ -86,12 +105,10 @@ const Results = () => {
                   <Card.Title>
                     Arrival Airport : {item.arrivalAirportFsCode}
                   </Card.Title>
-                  <Card.Text>
-                    Arrival Time : {item.arrivalTime}
-                    Stops : {item.stops}
-                  </Card.Text>
+                  <Card.Text>Arrival Time : {item.arrivalTime}</Card.Text>
+                  <Card.Text>Stops : {item.stops}</Card.Text>
                   <Button variant="primary" onClick={showModal}>
-                    Book Now
+                    For Booking and Pricing
                   </Button>
                 </Card.Body>
                 <Card.Footer className="text-muted">
@@ -143,7 +160,7 @@ const Results = () => {
           <input
             className="form-control"
             type="number"
-            placeholder="Your best callback Number"
+            placeholder=""
             name="number"
           />
           <br />
@@ -151,14 +168,12 @@ const Results = () => {
           <br />
           <textarea
             className="form-control"
-            placeholder="Your Message"
+            placeholder="One Way Or Return ?"
             name="message"
           />
           <br />
           <div className="ms-auto">
-            <button className="mb-2" onClick={sendEmail}>
-              Send
-            </button>
+            <button className="mb-2"> Send Email </button>
           </div>
         </form>
         <button onClick={handleCancel}>Cancel</button>{" "}
