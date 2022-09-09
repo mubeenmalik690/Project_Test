@@ -70,7 +70,7 @@ const Footer = () => {
                       Street Birmingham B2 4EG
                     </p>
                     <p>
-                      <i class="fa-solid fa-phone"></i> 07853300780
+                      <i class="fa-solid fa-phone"></i> +447456281942
                     </p>
                     <p>
                       <i class="fa-solid fa-envelope"></i>{" "}
@@ -89,7 +89,7 @@ const Footer = () => {
           <div className="row">
             <div className="col-lg-6 col-md-6 col-sm-12 column">
               <div className="copyright">
-                <a href="#">Bright Sun</a> &copy; 2022 All Right Reserved
+                <a href="#">Penta Travels</a> &copy; 2022 All Right Reserved
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-sm-12 column">
